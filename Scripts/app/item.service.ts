@@ -36,7 +36,7 @@ export class ItemService {
     }
 
     getRandom(num?:number) {
-        let url = this.baseUrl + "GetLatest/";
+        let url = this.baseUrl + "GetRandom/";
         if (num != null) {
             url += num;
         }
