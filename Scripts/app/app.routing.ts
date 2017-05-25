@@ -25,12 +25,12 @@ const appRoutes: Routes = [
         component: LoginComponent
     },
     {
-        path: "**",
-        component: PageNotFoundComponent
-    },
-    {
         path: "item/:id",
         component: ItemDetailComponent
+    },
+    {
+        path: "**",
+        component: PageNotFoundComponent
     }
 ];
 export const AppRoutingProviders: any[] = [];

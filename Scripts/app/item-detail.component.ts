@@ -47,6 +47,7 @@ export class ItemDetailComponent {
 
     ngOnInit() {
         var id = +this.activatedRoute.snapshot.params["id"];
+        console.log(id);
         if (id) {
             this.itemService.get(id).subscribe(
                 item => this.item = item
