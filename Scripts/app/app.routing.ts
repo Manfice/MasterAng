@@ -5,6 +5,7 @@ import { HomeComponent } from "./home.component";
 import { AboutComponent } from "./about.component";
 import { LoginComponent } from "./login.component";
 import { PageNotFoundComponent } from "./page-not-found.component";
+import { ItemDetailComponent } from "./item-detail.component"
 
 const appRoutes: Routes = [
     {
@@ -26,6 +27,10 @@ const appRoutes: Routes = [
     {
         path: "**",
         component: PageNotFoundComponent
+    },
+    {
+        path: "item/:id",
+        component: ItemDetailComponent
     }
 ];
 export const AppRoutingProviders: any[] = [];

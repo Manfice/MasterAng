@@ -8,7 +8,7 @@
             <a class="about" [routerLink]="['about']">About</a> |
             <a class="login" [routerLink]="['login']">Login</a>
         </div>
-        <routerOutlet></routerOutlet>
+        <router-outlet></router-outlet>
         `
 })
 export class AppComponent {
