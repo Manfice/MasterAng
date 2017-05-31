@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
@@ -31,10 +32,11 @@ namespace WebApplicationBasic
             services.AddMvc();
             services.AddEntityFramework();
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
+            services.AddSingleton<DbSeeder>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, DbSeeder dbSeeder)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -50,8 +52,20 @@ namespace WebApplicationBasic
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
-            app.UseStaticFiles();
+            app.UseDefaultFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                OnPrepareResponse = context =>
+                {
+                    // Disable caching for all static files.
+                    context.Context.Response.Headers["Cache-Control"] =
+                    Configuration["StaticFiles:Headers:Cache-Control"];
+                    context.Context.Response.Headers["Pragma"] =
+                    Configuration["StaticFiles:Headers:Pragma"];
+                    context.Context.Response.Headers["Expires"] =
+                    Configuration["StaticFiles:Headers:Expires"];
+                }
+            });
 
             app.UseMvc(routes =>
             {
@@ -63,6 +77,14 @@ namespace WebApplicationBasic
                     name: "spa-fallback",
                     defaults: new { controller = "Home", action = "Index" });
             });
+            try
+            {
+                dbSeeder.SeedAsync().Wait();
+            }
+            catch (AggregateException e)
+            {
+                throw new Exception(e.ToString());
+            }
         }
     }
 }
