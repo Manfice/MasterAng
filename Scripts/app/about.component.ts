@@ -1,13 +1,15 @@
-﻿import { Component } from "@angular/core";
+﻿import {Component} from "@angular/core";
+
 @Component({
     selector: "about",
     template: `
-        <h1>{{title}}</h1>
+        <h2>{{title}}</h2>
         <div>
-            <p>This is my about page</p>
+            OpenGameList: a production-ready, fully-featured SPA sample powered by ASP.NET Core Web API and Angular2.
         </div>
-        `
+    `
 })
+
 export class AboutComponent {
-    title = "About page";
+    title = "About";
 }

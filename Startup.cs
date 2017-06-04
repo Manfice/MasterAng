@@ -34,8 +34,9 @@ namespace WebApplicationBasic
             // Add framework services.
             services.AddMvc();
             services.AddEntityFramework();
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]), ServiceLifetime.Transient);
             services.AddSingleton<DbSeeder>();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -83,6 +84,7 @@ namespace WebApplicationBasic
             Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<Item, ItemViewModel>();
+                cfg.CreateMap<ItemViewModel, Item>();
             });
             try
             {

@@ -4,6 +4,7 @@
     gp_sourcemaps = require("gulp-sourcemaps"),
     gp_typescript = require("gulp-typescript"),
     gp_uglify = require("gulp-uglify");
+    sass = require('gulp-sass');
 
 /// Define paths
 var srcPaths = {
@@ -21,6 +22,9 @@ var srcPaths = {
     ],
     js_rxjs: [
         "node_modules/rxjs/**"
+    ],
+    sass:[
+        "./sass/**/*.scss"
     ]
 };
 
@@ -28,7 +32,8 @@ var destPaths = {
     app: "wwwroot/app/",
     js: "wwwroot/js/",
     js_angular: "wwwroot/js/@angular/",
-    js_rxjs: "wwwroot/js/rxjs/"
+    js_rxjs: "wwwroot/js/rxjs/",
+    css:"wwwroot/css/"
 };
 
 // Compile, minify and create sourcemaps all TypeScript files and place them to wwwroot/app, together with their js.map files.
@@ -40,6 +45,16 @@ gulp.task("app", ["app_clean"], function () {
 		.pipe(gp_sourcemaps.write("/"))
         .pipe(gulp.dest(destPaths.app));
 });
+
+gulp.task("sass", function(){
+    return gulp.src('./sass/**/*.sass')
+    .pipe(sass().on('error', sass.logError))
+    .pipe(gulp.dest('./wwwroot/css'))
+})
+
+gulp.task('sass:watch', function(){
+    gulp.watch([srcPaths.sass], ['sass'])
+})
 
 // Delete wwwroot/app contents
 gulp.task("app_clean", function () {
@@ -65,11 +80,16 @@ gulp.task("js_clean", function () {
 
 // Watch specified files and define what to do upon file changes
 gulp.task("watch", function () {
-    gulp.watch([srcPaths.app, srcPaths.js], ["app", "js"]);
+    gulp.watch([srcPaths.app, srcPaths.js, srcPaths.sass], ["app", "js", "sass"]);
 });
 
+gulp.task('build', function() {
+    return gulp
+        .src('./**/*.cs')
+        .pipe(msc(['-fullpaths', '-debug', '-target:exe', '-out:' + program]));
+});
 // Global cleanup task
 gulp.task("cleanup", ["app_clean", "js_clean"]);
 
 // Define the default task so it will launch all other tasks
-gulp.task("default", ["app", "js", "watch"]);
+gulp.task("default", ["app", "js", "sass","watch"]);

@@ -28,7 +28,7 @@ namespace WebApplicationBasic.Controllers
         public IActionResult GetLatest(int n)
         {
             if (n > MaxNumberOfItems) n = MaxNumberOfItems;
-            var arr = _context.Items.OrderByDescending(item => item.CreatedDate).Take(n);
+            var arr = _context.Items.OrderByDescending(item => item.LastModifiedDate).Take(n);
             return new JsonResult(ToItemVmFromItem(arr), Settings);
         }
 
@@ -65,20 +65,21 @@ namespace WebApplicationBasic.Controllers
         }
 
         [HttpPost()]
-        public IActionResult Add(ItemViewModel ivm)
+        public IActionResult Add([FromBody]ItemViewModel ivm)
         {
-            if (ivm == null) return StatusCode(500);
+            if (ivm == null) return StatusCode(500, new {Error=$"model is null"});
             var item = Mapper.Map<Item>(ivm);
             item.CreatedDate = item.LastModifiedDate = DateTime.Now;
             item.UserId =
                 _context.Users.FirstOrDefault(
                     u => u.UserName.Equals("admin", StringComparison.CurrentCultureIgnoreCase))?.Id;
             _context.Items.Add(item);
+            _context.SaveChanges();
             return new JsonResult(Mapper.Map<ItemViewModel>(item), Settings);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Upadte(int id, ItemViewModel ivm)
+        public IActionResult Upadte(int id, [FromBody]ItemViewModel ivm)
         {
             if (ivm == null) return StatusCode(500, new { Error = $"Nothing to update" });
             var item = _context.Items.FirstOrDefault(i => i.Id == id);

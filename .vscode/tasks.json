@@ -4,6 +4,9 @@
     "version": "0.1.0",
     "command": "gulp",
     "isShellCommand": true,
-    "args": ["--no-color"],
-    "showOutput": "always"
+    "args": [""],
+    "showOutput": "silent",
+    "echoCommand": true,
+    "isBackground": true,
+    "isBuildCommand":true
 }
