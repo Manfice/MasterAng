@@ -1,0 +1,27 @@
+$color-err: #b94a48
+
+body
+    margin: 0
+    padding: 0
+
+.body-content
+    padding-left: 15px
+    padding-right: 15px
+
+input, select, textarea
+    max-width: 280px
+
+.field-validation-error
+    color: $color-err
+
+.field-validation-valid
+    display: none
+
+input.input-validation-error
+    border: 1px solid $color-err
+
+input[type="checkbox"].input-validation-error
+    border: 0 none
+
+.validation-summary-errors
+    color: $color-err

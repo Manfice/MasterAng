@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,IAAI;EACA,MAAM,EAAE,CAAC;EACT,OAAO,EAAE,CAAC;;AAEd,aAAa;EACT,YAAY,EAAE,IAAI;EAClB,aAAa,EAAE,IAAI;;AAEvB,uBAAuB;EACnB,SAAS,EAAE,KAAK;;AAEpB,uBAAuB;EACnB,KAAK,EAAE,OAAO;;AAElB,uBAAuB;EACnB,OAAO,EAAE,IAAI;;AAEjB,4BAA4B;EACxB,MAAM,EAAE,iBAAiB",
+"sources": ["../../../sass/partials/reset.sass"],
+"names": [],
+"file": "reset.css"
+}

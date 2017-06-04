@@ -5,7 +5,8 @@
     gp_typescript = require("gulp-typescript"),
     gp_uglify = require("gulp-uglify");
     sass = require('gulp-sass');
-
+    browser = require('browser-sync');
+    reload = browser.reload;
 /// Define paths
 var srcPaths = {
     app: ["Scripts/app/main.ts", "Scripts/app/**/*.ts"],
@@ -15,7 +16,9 @@ var srcPaths = {
         "node_modules/zone.js/dist/zone.js",
         "node_modules/reflect-metadata/Reflect.js",
         "node_modules/systemjs/dist/system.src.js",
-        "node_modules/typescript/lib/typescript.js"
+        "node_modules/typescript/lib/typescript.js",
+        "node_modules/ng2-bootstrap/bundles/ngx-bootstrap.umd.min.js",
+        "node_modules/moment/moment.js"
     ],
     js_angular: [
         "node_modules/@angular/**"
@@ -24,7 +27,7 @@ var srcPaths = {
         "node_modules/rxjs/**"
     ],
     sass:[
-        "./sass/**/*.scss"
+        "sass/**/*.sass"
     ]
 };
 
@@ -43,17 +46,18 @@ gulp.task("app", ["app_clean"], function () {
         .pipe(gp_typescript(require("./tsconfig.json").compilerOptions))
         .pipe(gp_uglify({ mangle: false }))
 		.pipe(gp_sourcemaps.write("/"))
-        .pipe(gulp.dest(destPaths.app));
+        .pipe(gulp.dest(destPaths.app))
+        .pipe(reload({stream:true}));
 });
 
-gulp.task("sass", function(){
-    return gulp.src('./sass/**/*.sass')
-    .pipe(sass().on('error', sass.logError))
-    .pipe(gulp.dest('./wwwroot/css'))
+gulp.task("sass",["sass_clean"], function(){
+    return gulp.src(srcPaths.sass)
+    .pipe(sass())
+    .pipe(gulp.dest(destPaths.css))
 })
-
-gulp.task('sass:watch', function(){
-    gulp.watch([srcPaths.sass], ['sass'])
+gulp.task('sass_clean', function() {
+    return gulp.src(destPaths.css + "**/*.*", {read:false})
+    .pipe(gp_clean({force:true}))
 })
 
 // Delete wwwroot/app contents
@@ -82,14 +86,12 @@ gulp.task("js_clean", function () {
 gulp.task("watch", function () {
     gulp.watch([srcPaths.app, srcPaths.js, srcPaths.sass], ["app", "js", "sass"]);
 });
-
-gulp.task('build', function() {
-    return gulp
-        .src('./**/*.cs')
-        .pipe(msc(['-fullpaths', '-debug', '-target:exe', '-out:' + program]));
-});
 // Global cleanup task
 gulp.task("cleanup", ["app_clean", "js_clean"]);
 
 // Define the default task so it will launch all other tasks
-gulp.task("default", ["app", "js", "sass","watch"]);
+gulp.task("default", ["app", "js","watch"]);
+
+gulp.task('sass:watch', function(){
+    gulp.watch([srcPaths.sass], ['sass'])
+})
