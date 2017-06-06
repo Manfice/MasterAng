@@ -1,0 +1,18 @@
+h1.header {
+  font-size: 40px;
+  margin: 46px 0 0 0;
+  padding: 20px 20px 20px 112px;
+  background: url("/images/header-bg.png") no-repeat left top #efefef; }
+
+.navbar {
+  margin-bottom: 0; }
+  .navbar img {
+    width: 32px;
+    height: 32px;
+    margin: -4x 0 0 0;
+    padding: 0; }
+
+#navbar-toggle-cbox {
+  display: none; }
+  #navbar-toggle-cbox:checked ~ .collapse {
+    display: block; }

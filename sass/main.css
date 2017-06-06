@@ -18,17 +18,6 @@ input, select, textarea {
 input.input-validation-error {
   border: 1px solid #b94a48; }
 
-.item-details {
-  margin: 5px;
-  padding: 5px 10px;
-  border: solid 1px black;
-  background-color: #dddddd;
-  width: 300px; }
 
-.item-details * {
-  vertical-align: middle; }
-
-.item-details ul li {
-  padding: 5px 0; }
 
 /*# sourceMappingURL=main.css.map */

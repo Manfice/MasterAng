@@ -24,15 +24,21 @@ input[type="checkbox"].input-validation-error {
 .validation-summary-errors {
   color: #b94a48; }
 
-.item-details {
-  margin: 5px;
-  padding: 5px 10px;
-  border: solid 1px black;
-  background-color: #dddddd;
-  width: 300px; }
+h1.header {
+  font-size: 40px;
+  margin: 46px 0 0 0;
+  padding: 20px 20px 20px 112px;
+  background: url("/images/header-bg.png") no-repeat left top #efefef; }
 
-.item-details * {
-  vertical-align: middle; }
+.navbar {
+  margin-bottom: 0; }
+  .navbar img {
+    width: 32px;
+    height: 32px;
+    margin: -4x 0 0 0;
+    padding: 0; }
 
-.item-details ul li {
-  padding: 5px 0; }
+#navbar-toggle-cbox {
+  display: none; }
+  #navbar-toggle-cbox:checked ~ .collapse {
+    display: block; }
