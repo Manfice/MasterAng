@@ -6,9 +6,6 @@ body {
   padding-left: 15px;
   padding-right: 15px; }
 
-input, select, textarea {
-  max-width: 280px; }
-
 .field-validation-error {
   color: #b94a48; }
 

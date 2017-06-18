@@ -1,5 +1,5 @@
 ﻿import {Component} from "@angular/core";
-
+import {Router} from "@angular/router"
 @Component({
     selector: "opengamelist",
     template: `
@@ -19,10 +19,18 @@
             </div>
             <div class="collapse navbar-collapse" id="navbar">
                 <ul class="nav navbar-nav">
-                    <li><a class="home" [routerLink]="['']">Home</a></li>
-                    <li><a class="about" [routerLink]="['about']">About</a></li>
-                    <li><a class="login" [routerLink]="['login']">Login</a></li>
-                    <li><a class="add" [routerLink]="['item/edit', 0]">Add New</a></li>
+                    <li [class.active]="isActive([''])">
+                        <a class="home" [routerLink]="['']">Home</a>
+                    </li>
+                    <li [class.active]="isActive(['about'])">
+                        <a class="about" [routerLink]="['about']">About</a>
+                    </li>
+                    <li [class.active]="isActive(['login'])">
+                        <a class="login" [routerLink]="['login']">Login</a>
+                    </li>
+                    <li [class.active]="isActive(['item/edit', 0])">
+                        <a class="add" [routerLink]="['item/edit', 0]">Add New</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -36,4 +44,10 @@
 
 export class AppComponent {
     title = "OpenGameList";
+    constructor(public router:Router){}
+    isActive(data: any[]):boolean{
+        return this.router.isActive(
+            this.router.createUrlTree(data),true
+        );
+    }
 }

@@ -48,6 +48,17 @@
     <None Remove="node_modules\**" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="wwwroot\images\background.jpg" />
+    <Content Include="wwwroot\images\bg-gray.jpg" />
+    <Content Include="wwwroot\images\bg-orange.jpg" />
+    <Content Include="wwwroot\images\bg-yellow.jpg" />
+    <Content Include="wwwroot\images\header-bg-right.png" />
+    <Content Include="wwwroot\images\header-bg.png" />
+    <Content Include="wwwroot\images\item-image-sample.png" />
+    <Content Include="wwwroot\images\latest-icon.png" />
+    <Content Include="wwwroot\images\logo.svg" />
+    <Content Include="wwwroot\images\most-viewed-icon.png" />
+    <Content Include="wwwroot\images\random-icon.png" />
     <Content Include="wwwroot\index.html" />
     <Content Include="wwwroot\systemjs.config.js" />
   </ItemGroup>
