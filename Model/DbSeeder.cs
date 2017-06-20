@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Web.Model.Comments;
 using Web.Model.Items;
@@ -11,48 +13,104 @@ namespace Web.Model
     public class DbSeeder
     {
         private readonly ApplicationDbContext _context;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public DbSeeder(ApplicationDbContext context)
+        public DbSeeder(ApplicationDbContext context, RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _roleManager = roleManager;
+            _userManager = userManager;
         }
 
         public async Task SeedAsync()
         {
             _context.Database.EnsureCreated();
-            if (await _context.Users.CountAsync() == 0) CreateUsers();
+            if (await _context.Users.CountAsync() == 0) await CreateUsersAsync();
             if (await _context.Items.CountAsync() == 0) CreateItems();
         }
 
-        private void CreateUsers()
+        private async Task CreateUsersAsync()
         {
-            var crdt = new DateTime(1984, 8, 29, 08, 40, 00);
-            var userAdmin = new ApplicationUser
+            var createdDate = DateTime.Now;
+            var lastModifiedDate = DateTime.Now;
+            const string roleAdmin = "Admins";
+            const string roleRegister = "Register";
+
+            if (!await _roleManager.RoleExistsAsync(roleAdmin))
             {
-                Id = Guid.NewGuid().ToString(),
-                UserName = "admin",
+                await _roleManager.CreateAsync(new IdentityRole(roleAdmin));
+            }
+            if (!await _roleManager.RoleExistsAsync(roleRegister))
+            {
+                await _roleManager.CreateAsync(new IdentityRole(roleRegister));
+            }
+
+            var userAdmin = new ApplicationUser()
+            {
+                UserName = "Petr",
                 Email = "c592@yandex.ru",
-                CreatedDate = crdt,
-                LastModifiedDate = DateTime.Now,
-                DisplayName = "Manfice"
+                CreatedDate = createdDate,
+                LastModifiedDate = lastModifiedDate
             };
-            _context.Users.Add(userAdmin);
-#if DEBUG
-            for (var i = 0; i < 5; i++)
+            var usr = await _userManager.FindByIdAsync(userAdmin.Id);
+            if (usr == null)
             {
-                var u = new ApplicationUser
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    UserName = $"User_{i}",
-                    Email = $"{i}@{i}.com",
-                    CreatedDate = crdt.AddDays(i + 2 * 3),
-                    LastModifiedDate = DateTime.Now,
-                    DisplayName = $"User_name_{i}"
-                };
-                _context.Users.Add(u);
+                var result = await _userManager.CreateAsync(userAdmin, "1q2w3eOP");
+                result = await _userManager.AddToRoleAsync(userAdmin, roleAdmin);
+                userAdmin.EmailConfirmed = true;
+                userAdmin.LockoutEnabled = false;
+            }
+
+#if DEBUG
+            var userVasia = new ApplicationUser()
+            {
+                UserName = "Vasia",
+                Email = "vasia@yandex.ru",
+                CreatedDate = createdDate,
+                LastModifiedDate = lastModifiedDate
+            };
+
+            if (await _userManager.FindByIdAsync(userVasia.Id) == null)
+            {
+                await _userManager.CreateAsync(userVasia, "Pass4vasia");
+                await _userManager.AddToRoleAsync(userVasia, roleRegister);
+                userVasia.EmailConfirmed = true;
+                userVasia.LockoutEnabled = false;
+            }
+
+            var userVika = new ApplicationUser()
+            {
+                UserName = "Vika",
+                Email = "vika@yandex.ru",
+                CreatedDate = createdDate,
+                LastModifiedDate = lastModifiedDate
+            };
+
+            if (await _userManager.FindByIdAsync(userVika.Id) == null)
+            {
+                await _userManager.CreateAsync(userVika, "Pass4vika");
+                await _userManager.AddToRoleAsync(userVika, roleRegister);
+                userVika.EmailConfirmed = true;
+                userVika.LockoutEnabled = false;
+            }
+            var userIgor = new ApplicationUser()
+            {
+                UserName = "Igor",
+                Email = "Igor@yandex.ru",
+                CreatedDate = createdDate,
+                LastModifiedDate = lastModifiedDate
+            };
+
+            if (await _userManager.FindByIdAsync(userIgor.Id) == null)
+            {
+                await _userManager.CreateAsync(userIgor, "Pass4igor");
+                await _userManager.AddToRoleAsync(userIgor, roleAdmin);
+                userIgor.EmailConfirmed = true;
+                userIgor.LockoutEnabled = false;
             }
 #endif
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         private void CreateItems()
@@ -60,7 +118,7 @@ namespace Web.Model
             var crDt = new DateTime(2017, 1, 1, 0, 0, 0);
             var authorId =
                 _context.Users.FirstOrDefault(
-                    user => user.UserName.Equals("admin", StringComparison.CurrentCultureIgnoreCase)).Id;
+                    user => user.UserName.Equals("Petr", StringComparison.CurrentCultureIgnoreCase)).Id;
 #if DEBUG
             const int num = 1000;
             for (var i = 0; i < num; i++)

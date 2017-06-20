@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Web.Model.Comments;
 using Web.Model.Items;
 
 namespace Web.Model.Users
 {
-    public class ApplicationUser
+    public class ApplicationUser:IdentityUser
     {
-        public ApplicationUser()
-        {
-        }
-
-        public string Id { get; set; }
-        public string UserName { get; set; }
-        public string Email { get; set; }
         public string DisplayName { get; set; }
         public string Notes { get; set; }
         public int Type { get; set; }
